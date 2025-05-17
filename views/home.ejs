@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人文案照片分享 - 首页</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --secondary-color: #45a049;
+            --text-color: #333;
+            --light-gray: #f5f5f5;
+            --white: #ffffff;
+            --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            color: var(--text-color);
+            background-color: var(--light-gray);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: var(--white);
+            box-shadow: var(--shadow);
+            padding: 15px 0;
+            margin-bottom: 30px;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+        
+        .logout-btn {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .logout-btn:hover {
+            color: var(--primary-color);
+        }
+        
+        .page-title {
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        
+        .new-article-btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 10px 15px;
+            border-radius: 4px;
+            text-decoration: none;
+            margin-bottom: 20px;
+            transition: background-color 0.3s;
+        }
+        
+        .new-article-btn:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .article-card {
+            background-color: var(--white);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+        
+        .article-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .article-content {
+            padding: 20px;
+        }
+        
+        .article-title {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .article-preview {
+            color: #666;
+            margin-bottom: 15px;
+        }
+        
+        .article-date {
+            font-size: 0.8rem;
+            color: #999;
+            margin-bottom: 15px;
+        }
+        
+        .article-actions {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .action-btn {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        
+        .action-btn:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .articles-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">个人文案照片分享</div>
+            <nav class="nav-links">
+                <a href="/articles">首页</a>
+                <a href="/media">素材库</a>
+                <form action="/auth/logout" method="POST">
+                    <button type="submit" class="logout-btn">退出登录</button>
+                </form>
+            </nav>
+        </div>
+    </header>
+    
+    <div class="container">
+        <h1 class="page-title">我的文章</h1>
+        <a href="/articles/new" class="new-article-btn">
+            <i class="fas fa-plus"></i> 新建文章
+        </a>
+        
+        <div class="articles-grid">
+            <% articles.forEach(article => { %>
+                <div class="article-card">
+                    <div class="article-content">
+                        <h3 class="article-title"><%= article.title %></h3>
+                        <p class="article-preview"><%= article.preview %></p>
+                        <p class="article-date">
+                            创建于: <%= new Date(article.createdAt).toLocaleString() %><br>
+                            更新于: <%= new Date(article.updatedAt).toLocaleString() %>
+                        </p>
+                        <div class="article-actions">
+                            <a href="/articles/<%= article.id %>" class="action-btn">
+                                <i class="fas fa-eye"></i> 查看
+                            </a>
+                            <a href="/articles/edit/<%= article.id %>" class="action-btn">
+                                <i class="fas fa-edit"></i> 编辑
+                            </a>
+                            <button class="action-btn copy-btn" data-id="<%= article.id %>">
+                                <i class="fas fa-copy"></i> 复制
+                            </button>
+                            <button class="action-btn share-btn" data-id="<%= article.id %>">
+                                <i class="fas fa-share-alt"></i> 分享
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+    </div>
+
+    <script>
+        // 复制文章功能
+        document.querySelectorAll('.copy-btn').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const articleId = btn.getAttribute('data-id');
+                try {
+                    const response = await fetch(`/articles/${articleId}/copy`, {
+                        method: 'POST'
+                    });
+                    const data = await response.json();
+                    if (data.success) {
+                        alert('文章复制成功');
+                        window.location.reload();
+                    } else {
+                        alert('复制失败: ' + data.message);
+                    }
+                } catch (error) {
+                    console.error('复制错误:', error);
+                    alert('复制过程中发生错误');
+                }
+            });
+        });
+
+        // 分享文章功能
+        document.querySelectorAll('.share-btn').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const articleId = btn.getAttribute('data-id');
+                const customSuffix = prompt('请输入自定义分享链接后缀（可选）:');
+                
+                try {
+                    const response = await fetch(`/articles/share/${articleId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ customSuffix })
+                    });
+                    const data = await response.json();
+                    if (data.success) {
+                        const shareLink = window.location.origin + data.shareLink;
+                        prompt('分享链接已生成，请复制:', shareLink);
+                    } else {
+                        alert('生成分享链接失败');
+                    }
+                } catch (error) {
+                    console.error('分享错误:', error);
+                    alert('分享过程中发生错误');
+                }
+            });
+        });
+    </script>
+</body>
+<div style="text-align: center; margin-top: 20px;">
+  <a href="https://beian.miit.gov.cn" style="color: blue;">豫ICP备2024077511号-1</a>
+</div>
+</html>
