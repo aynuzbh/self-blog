@@ -5,8 +5,7 @@ name: Node.js Package
 
 on:
   release:
-    types: [created]
-i】看，
+    types: [create]
 jobs:
   build:
     runs-on: ubuntu-latest
